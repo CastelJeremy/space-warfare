@@ -1,0 +1,76 @@
+@page "/{warId}"
+@inject HttpClient Http
+
+@if (!WarExists)
+{
+    <h1>This system is empty</h1>
+}
+else
+{
+    <h1>@WarId</h1>
+    <Astec Fleet="@Fleet" Beams="@CosmosBeams"/>
+    <Astec Beams="@CommanderBeams" OnBeam="OnCommanderBeam"/>
+
+    @if (Status == WarStatus.ENDED)
+    {
+        <h2>@(CommanderWon ? "You Won" : "You Lose")</h2>
+    }
+}
+
+@code
+{
+    [Parameter]
+    public string WarId { get; set; } = null!;
+
+    private bool WarExists { get; set; } = true;
+    private WarStatus Status { get; set; }
+    private bool CommanderWon { get; set; }
+    private SpacecraftDto[] Fleet { get; set; } = null!;
+    private List<Beam> CommanderBeams { get; set; } = null!;
+    private List<Beam> CosmosBeams { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
+            Fleet = war.CommanderFleet;
+            CommanderBeams = war.CommanderBeams;
+            CosmosBeams = war.CosmosBeams;
+            Status = war.Status;
+        } 
+        catch (HttpRequestException)
+        {
+            WarExists = false;
+        }
+    }
+
+    private async void OnCommanderBeam(int posX, int posY)
+    {
+        try
+        {
+            BeamActionDto beam = new BeamActionDto{ PosX = posX, PosY = posY };
+            using HttpResponseMessage res = await Http.PostAsJsonAsync($"/war/beam/{WarId}", beam);
+            BeamResponseDto beamResponse = await res.Content.ReadFromJsonAsync<BeamResponseDto>() ?? throw new Exception("Failed to decode response.");
+
+            Status = beamResponse.Status;
+
+            if (Status == WarStatus.ENDED)
+            {
+                CommanderWon = beamResponse.Winner == "Commander";
+            }
+
+            Beam commanderBeam  = new Beam { PosX = posX, PosY = posY, Hit = beamResponse.Hit };
+            CommanderBeams.Add(commanderBeam);
+
+            if (beamResponse.CosmosBeam is not null)
+            {
+                CosmosBeams.Add(beamResponse.CosmosBeam);
+            }
+
+            StateHasChanged();
+        }
+        catch (HttpRequestException)
+        { }
+    }
+}

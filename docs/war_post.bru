@@ -1,0 +1,15 @@
+meta {
+  name: /war
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/war
+  body: none
+  auth: none
+}
+
+vars:post-response {
+  warId: res.body.id
+}

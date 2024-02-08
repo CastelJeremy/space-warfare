@@ -1,0 +1,18 @@
+meta {
+  name: /war/beam/id
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/war/beam/{{warId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "posX": 6,
+    "posY": 3
+  }
+}

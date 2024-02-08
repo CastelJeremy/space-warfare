@@ -1,0 +1,81 @@
+<h1>Astec</h1>
+<table class=@(OnBeam is not null ? "clickable" : "")>
+    @foreach (int i in Enumerable.Range(0, 10))
+    {
+    <tr>
+        @foreach (int j in Enumerable.Range(0, 10))
+        {
+            <td
+                @onclick="() => OnAstecClick(i, j)"
+                class=@(Grid[i, j] == 'X' ? "hit" : (Grid[i, j] != '*' && Grid[i, j] != 'O' ? "spacecraft" : ""))
+            >@Grid[i, j]</td>
+        }
+    </tr>
+    }
+</table>
+
+@code
+{
+    [Parameter]
+    public SpacecraftDto[]? Fleet { get; set; }
+
+    [Parameter]
+    public List<Beam>? Beams { get; set; }
+
+    [Parameter]
+    public Action<int, int>? OnBeam { get; set; }
+
+    private char[,] Grid { get; set; } = new char[10, 10];
+
+    protected override void OnParametersSet()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                Grid[i, j] = '*';
+            }
+        }
+
+        if (Fleet is not null)
+        {
+            foreach (SpacecraftDto spacecraft in Fleet)
+            {
+                for (int i = 0; i < spacecraft.Size; i++)
+                {
+                    switch (spacecraft.Orientation)
+                    {
+                        case Orientation.NORTH:
+                            Grid[spacecraft.PosX, spacecraft.PosY + i] = spacecraft.Id;
+                            break;
+                        case Orientation.EAST:
+                            Grid[spacecraft.PosX - i, spacecraft.PosY] = spacecraft.Id;
+                            break;
+                        case Orientation.SOUTH:
+                            Grid[spacecraft.PosX, spacecraft.PosY - i] = spacecraft.Id;
+                            break;
+                        case Orientation.WEST:
+                            Grid[spacecraft.PosX + i, spacecraft.PosY] = spacecraft.Id;
+                            break;
+                    }
+                }
+            }
+        }
+
+        if (Beams is not null)
+        {
+            foreach (Beam b in Beams)
+            {
+                Grid[b.PosX, b.PosY] = b.Hit ? 'X' : 'O';
+            }
+        }
+    }
+
+    private void OnAstecClick(int posX, int posY)
+    {
+        if (OnBeam is not null)
+        {
+            OnBeam(posX, posY);
+        }
+    }
+}

@@ -1,0 +1,37 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<button @onclick="NewWar">New</button>
+
+<input type="text" @bind="WarId">
+<button @onclick="JoinWar">Join</button>
+
+@code
+{
+    private string WarId { get; set; } = string.Empty;
+
+    private async Task NewWar()
+    {
+        try
+        {
+            using var res = await Http.PostAsync("/war", null);
+            WarDto? war = await res.Content.ReadFromJsonAsync<WarDto>();
+
+            if (war is not null)
+            {
+                NavigationManager.NavigateTo($"/{war.Id}");
+            }
+        } 
+        catch (HttpRequestException) { }
+    }
+
+    public void JoinWar()
+    {
+        NavigationManager.NavigateTo($"/{WarId}");
+    }
+}
