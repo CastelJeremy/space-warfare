@@ -19,10 +19,8 @@ public class Astec
 
         Array orientationValues = Enum.GetValues(typeof(Orientation));
 
-        for (int i = 0; i < Fleet.Count(); i++)
+        foreach (Spacecraft spacecraft in Fleet)
         {
-            Spacecraft spacecraft = Fleet[i];
-
             do
             {
                 spacecraft.Orientation = (Orientation)orientationValues.GetValue(Random.Shared.Next(orientationValues.Length))!;
@@ -101,13 +99,8 @@ public class Astec
         }
 
         char spacecraftId = Grid[x, y];
-        for (int i = 0; i < Fleet.Length; i++)
-        {
-            if (spacecraftId == Fleet[i].Id)
-            {
-                Fleet[i].Life--;
-            }
-        }
+        Spacecraft spacecraft = Fleet.Where(s => s.Id == spacecraftId).First();
+        spacecraft.Life--;
 
         return true;
     }

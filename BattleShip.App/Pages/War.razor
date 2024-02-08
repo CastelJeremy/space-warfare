@@ -45,11 +45,10 @@ else
         }
     }
 
-    private async void OnCommanderBeam(int posX, int posY)
+    private async void OnCommanderBeam(BeamActionDto beam)
     {
         try
         {
-            BeamActionDto beam = new BeamActionDto{ PosX = posX, PosY = posY };
             using HttpResponseMessage res = await Http.PostAsJsonAsync($"/war/beam/{WarId}", beam);
             BeamResponseDto beamResponse = await res.Content.ReadFromJsonAsync<BeamResponseDto>() ?? throw new Exception("Failed to decode response.");
 
@@ -60,7 +59,7 @@ else
                 CommanderWon = beamResponse.Winner == "Commander";
             }
 
-            Beam commanderBeam  = new Beam { PosX = posX, PosY = posY, Hit = beamResponse.Hit };
+            Beam commanderBeam  = new Beam { PosX = beam.PosX, PosY = beam.PosY, Hit = beamResponse.Hit };
             CommanderBeams.Add(commanderBeam);
 
             if (beamResponse.CosmosBeam is not null)

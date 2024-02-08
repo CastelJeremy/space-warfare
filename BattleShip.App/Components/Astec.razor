@@ -23,7 +23,7 @@
     public List<Beam>? Beams { get; set; }
 
     [Parameter]
-    public Action<int, int>? OnBeam { get; set; }
+    public Action<BeamActionDto>? OnBeam { get; set; }
 
     private char[,] Grid { get; set; } = new char[10, 10];
 
@@ -75,7 +75,7 @@
     {
         if (OnBeam is not null)
         {
-            OnBeam(posX, posY);
+            OnBeam(new BeamActionDto{ PosX = posX, PosY = posY });
         }
     }
 }

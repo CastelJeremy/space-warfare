@@ -33,13 +33,9 @@ public class War
     private void CheckWarStatus()
     {
         bool isCosmosDead = CosmosAstec.Fleet.All((s) => s.Life == 0);
-        if (isCosmosDead)
-        {
-            Status = WarStatus.ENDED;
-        }
-
         bool isCommanderDead = CommanderAstec.Fleet.All((s) => s.Life == 0);
-        if (isCommanderDead)
+
+        if (isCosmosDead || isCommanderDead)
         {
             Status = WarStatus.ENDED;
         }
