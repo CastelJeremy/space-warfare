@@ -25,10 +25,10 @@ public class Astec
             {
                 spacecraft.Orientation = (Orientation)orientationValues.GetValue(Random.Shared.Next(orientationValues.Length))!;
 
-                int minPosX = spacecraft.Orientation == Orientation.EAST ? spacecraft.Size : 0;
-                int maxPosX = spacecraft.Orientation == Orientation.WEST ? 10 - spacecraft.Size : 10;
-                int minPosY = spacecraft.Orientation == Orientation.SOUTH ? spacecraft.Size : 0;
-                int maxPosY = spacecraft.Orientation == Orientation.NORTH ? 10 - spacecraft.Size : 10;
+                int minPosX = spacecraft.Orientation == Orientation.SOUTH ? spacecraft.Size : 0;
+                int maxPosX = spacecraft.Orientation == Orientation.NORTH ? 10 - spacecraft.Size : 10;
+                int minPosY = spacecraft.Orientation == Orientation.EAST ? spacecraft.Size : 0;
+                int maxPosY = spacecraft.Orientation == Orientation.WEST ? 10 - spacecraft.Size : 10;
 
                 spacecraft.PosX = Random.Shared.Next(minPosX, maxPosX);
                 spacecraft.PosY = Random.Shared.Next(minPosY, maxPosY);
@@ -43,16 +43,16 @@ public class Astec
                 switch (spacecraft.Orientation)
                 {
                     case Orientation.NORTH:
-                        posY++;
+                        posX++;
                         break;
                     case Orientation.EAST:
-                        posX--;
-                        break;
-                    case Orientation.SOUTH:
                         posY--;
                         break;
+                    case Orientation.SOUTH:
+                        posX--;
+                        break;
                     case Orientation.WEST:
-                        posX++;
+                        posY++;
                         break;
                 }
             }
@@ -74,16 +74,16 @@ public class Astec
             switch (spacecraft.Orientation)
             {
                 case Orientation.NORTH:
-                    posY++;
+                    posX++;
                     break;
                 case Orientation.EAST:
-                    posX--;
-                    break;
-                case Orientation.SOUTH:
                     posY--;
                     break;
+                case Orientation.SOUTH:
+                    posX--;
+                    break;
                 case Orientation.WEST:
-                    posX++;
+                    posY++;
                     break;
             }
         }
