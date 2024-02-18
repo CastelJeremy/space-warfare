@@ -1,0 +1,32 @@
+@using BattleShip.Models
+
+<td
+    class=@(
+        (@Onclick is not null ? "clickable" : "")
+        + (@Model.Hit ? " hit" : "")
+        + (@Model.SpacecraftPart == SpacecraftPart.FULL ? " full" : "")
+        + (@Model.SpacecraftPart == SpacecraftPart.HEAD ? " head" : "")
+        + (@Model.SpacecraftPart == SpacecraftPart.BODY ? " body" : "")
+        + (@Model.SpacecraftPart == SpacecraftPart.TAIL ? " tail" : "")
+        + (@Model.SpacecraftOrientation == Orientation.EAST ? " east": "")
+        + (@Model.SpacecraftOrientation == Orientation.SOUTH ? " south": "")
+        + (@Model.SpacecraftOrientation == Orientation.WEST ? " west": "")
+    )
+    onclick="@Onclick"
+>
+    @if (Model.Beam) {
+        @("X")
+    } else {
+        @("*")
+    }
+</td>
+
+@code
+{
+    [Parameter]
+    public AstecCellModel Model { get; set; } = null!;
+
+    [Parameter]
+    public Action? Onclick { get; set; } = null;
+}
+

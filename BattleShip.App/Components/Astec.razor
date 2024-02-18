@@ -5,10 +5,7 @@
     <tr>
         @foreach (int j in Enumerable.Range(0, 10))
         {
-            <td
-                @onclick="() => OnAstecClick(i, j)"
-                class=@(Grid[i, j] == 'X' ? "hit" : (Grid[i, j] != '*' && Grid[i, j] != 'O' ? "spacecraft" : ""))
-            >@Grid[i, j]</td>
+            <AstecCell Model="@NewGrid[i, j]" Onclick="() => OnAstecClick(i, j)"></AstecCell>
         }
     </tr>
     }
@@ -25,7 +22,7 @@
     [Parameter]
     public Action<BeamActionDto>? OnBeam { get; set; }
 
-    private char[,] Grid { get; set; } = new char[10, 10];
+    private AstecCellModel[,] NewGrid { get; set; } = new AstecCellModel[10, 10];
 
     protected override void OnParametersSet()
     {
@@ -33,7 +30,7 @@
         {
             for (int j = 0; j < 10; j++)
             {
-                Grid[i, j] = '*';
+                NewGrid[i, j] = new AstecCellModel();
             }
         }
 
@@ -43,20 +40,37 @@
             {
                 for (int i = 0; i < spacecraft.Size; i++)
                 {
+                    int x = spacecraft.PosX;
+                    int y = spacecraft.PosY;
+
                     switch (spacecraft.Orientation)
                     {
                         case Orientation.NORTH:
-                            Grid[spacecraft.PosX, spacecraft.PosY + i] = spacecraft.Id;
+                            x += i;
                             break;
                         case Orientation.EAST:
-                            Grid[spacecraft.PosX - i, spacecraft.PosY] = spacecraft.Id;
+                            y -= i;
                             break;
                         case Orientation.SOUTH:
-                            Grid[spacecraft.PosX, spacecraft.PosY - i] = spacecraft.Id;
+                            x -= i;
                             break;
                         case Orientation.WEST:
-                            Grid[spacecraft.PosX + i, spacecraft.PosY] = spacecraft.Id;
+                            y += i;
                             break;
+                    }
+
+                    NewGrid[x, y].Empty = false;
+                    NewGrid[x, y].SpacecraftOrientation = spacecraft.Orientation;
+                    Console.WriteLine(spacecraft.Orientation);
+
+                    if (spacecraft.Size == 1) {
+                        NewGrid[x, y].SpacecraftPart = SpacecraftPart.FULL;
+                    } else if (i == 0) {
+                        NewGrid[x, y].SpacecraftPart = SpacecraftPart.HEAD;
+                    } else if (i == spacecraft.Size - 1) {
+                        NewGrid[x, y].SpacecraftPart = SpacecraftPart.TAIL;
+                    } else {
+                        NewGrid[x, y].SpacecraftPart = SpacecraftPart.BODY;
                     }
                 }
             }
@@ -66,7 +80,8 @@
         {
             foreach (Beam b in Beams)
             {
-                Grid[b.PosX, b.PosY] = b.Hit ? 'X' : 'O';
+                NewGrid[b.PosX, b.PosY].Beam = true;
+                NewGrid[b.PosX, b.PosY].Hit = b.Hit;
             }
         }
     }

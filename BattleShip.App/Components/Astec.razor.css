@@ -1,32 +1,3 @@
-table
-{
+table {
     border-collapse: collapse;
-}
-
-table.clickable
-{
-    cursor: pointer;
-}
-
-td
-{
-    height: 30px;
-    width: 30px;
-    text-align: center;
-    border: 1px solid black;
-}
-
-table.clickable td:hover
-{
-    background-color: #DAE5E9;
-}
-
-td.hit
-{
-    background-color: #FE5234;
-}
-
-td.ship
-{
-    background-color: #26F7BF;
 }

@@ -1,0 +1,49 @@
+td {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    border: 1px solid black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+}
+
+td.clickable {
+    cursor: pointer;
+}
+
+td.clickable:hover {
+    background-color: #dae5e9;
+}
+
+td.hit {
+    background-color: #fe5234;
+}
+
+td.east {
+    transform: rotate(90deg);
+}
+
+td.south {
+    transform: rotate(180deg);
+}
+
+td.west {
+    transform: rotate(270deg);
+}
+
+td.full {
+    background-image: url('img/full.png');
+}
+
+td.head {
+    background-image: url('img/head.png');
+}
+
+td.body {
+    background-image: url('img/body.png');
+}
+
+td.tail {
+    background-image: url('img/tail.png');
+}
