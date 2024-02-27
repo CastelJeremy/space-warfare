@@ -1,0 +1,15 @@
+meta {
+  name: /sessions/id
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{host}}/sessions/{{sessionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}

@@ -1,0 +1,9 @@
+version: '2'
+services:
+    auth-db:
+        image: postgres
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_DB: space-warfare
+            POSTGRES_PASSWORD: admin

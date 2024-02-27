@@ -1,0 +1,22 @@
+meta {
+  name: /auth/register
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "JRM",
+    "password": "-+"
+  }
+}
+
+vars:post-response {
+  accessToken: res.body.accessToken
+}
