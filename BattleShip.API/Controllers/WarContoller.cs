@@ -121,7 +121,7 @@ public class WarController : Controller
         }
 
         // Only usable for AI War
-        if (war.CosmosId is not null)
+        if (war.Status != WarStatus.LOBBY || war.CosmosId is not null)
         {
             return TypedResults.BadRequest();
         }
