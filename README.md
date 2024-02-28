@@ -33,7 +33,7 @@
   - [ ] Great Grid Styling
   - [ ] Unique Spacecraft Images
   - [x] Oriented Spacecraft Images
-  - [ ] \*Easy Start New War
+  - [x] \*Easy Start New War
   - [ ] \*Kill Feed
 - [ ] Lore Friendly Spacecraft Types names and images (Pod, Cruiser, Carrier, Explorer, Colonizer)
 

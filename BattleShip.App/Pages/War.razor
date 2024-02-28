@@ -1,5 +1,6 @@
 @page "/war/{warId}"
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 @if (!WarExists)
 {
@@ -14,6 +15,7 @@ else
     @if (Status == WarStatus.ENDED)
     {
         <h2>@(CommanderWon ? "You Won" : "You Lose")</h2>
+        <button @onclick="SubmitReplay">Replay ?</button>
     }
 }
 
@@ -71,5 +73,24 @@ else
         }
         catch (HttpRequestException)
         { }
+    }
+
+    private async Task SubmitReplay()
+    {
+        var res = await Http.PostAsync("/war", null);
+
+        if (res.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            WarDto? war = await res.Content.ReadFromJsonAsync<WarDto>();
+
+            if (war is not null)
+            {
+                NavigationManager.NavigateTo($"/{war.Id}");
+            }
+        }
+        else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
     }
 }
