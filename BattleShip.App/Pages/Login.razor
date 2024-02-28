@@ -1,0 +1,54 @@
+﻿@page "/login"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<input type="text" @bind="Username">
+<input type="password" @bind="Password">
+
+<button @onclick="SubmitLogin">Login</button>
+<button @onclick="SubmitRegister">Register</button>
+
+@code
+{
+    private string Username { get; set; } = string.Empty;
+    private string Password { get; set; } = string.Empty;
+
+    private async Task SubmitLogin()
+    {
+        try
+        {
+            var res = await Http.PostAsJsonAsync("/auth/login", new CommanderLoginDto { Username = Username, Password = Password });
+            res.EnsureSuccessStatusCode();
+            TokenDto? tokenDto = await res.Content.ReadFromJsonAsync<TokenDto>();
+
+            if (tokenDto is not null)
+            {
+                Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenDto.AccessToken);
+                NavigationManager.NavigateTo($"/");
+            }
+        }
+        catch (HttpRequestException) { }
+    }
+
+    private async Task SubmitRegister()
+    {
+        try
+        {
+            var res = await Http.PostAsJsonAsync("/auth/register", new CommanderRegisterDto { Username = Username, Password = Password });
+
+            res.EnsureSuccessStatusCode();
+            TokenDto? tokenDto = await res.Content.ReadFromJsonAsync<TokenDto>();
+
+            if (tokenDto is not null)
+            {
+                Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenDto.AccessToken);
+                NavigationManager.NavigateTo($"/");
+            }
+        }
+        catch (HttpRequestException) { }
+    }
+}

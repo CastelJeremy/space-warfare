@@ -17,21 +17,34 @@
 
     private async Task NewWar()
     {
-        try
+        var res = await Http.PostAsync("/war", null);
+
+        if (res.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            using var res = await Http.PostAsync("/war", null);
             WarDto? war = await res.Content.ReadFromJsonAsync<WarDto>();
 
             if (war is not null)
             {
                 NavigationManager.NavigateTo($"/{war.Id}");
             }
-        } 
-        catch (HttpRequestException) { }
+        }
+        else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
     }
 
-    public void JoinWar()
+    public async Task JoinWar()
     {
-        NavigationManager.NavigateTo($"/{WarId}");
+        var res = await Http.PostAsync("/war/join/" + WarId, null);
+
+        if (res.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo($"/{WarId}");
+        }
+        else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
     }
 }

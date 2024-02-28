@@ -3,15 +3,21 @@ using BattleShip.Models;
 public class War
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public WarStatus Status { get; set; } = WarStatus.ONGOING;
+    public Guid CommanderId { get; set; }
+    public Guid? CosmosId { get; set; } = null;
+    public WarStatus Status { get; set; } = WarStatus.LOBBY;
     private Spacecraft[] Fleet { get; init; } = new Spacecraft[4];
     private Astec CommanderAstec { get; set; }
     private Astec CosmosAstec { get; set; }
     public List<Beam> CommanderBeams { get; set; } = new();
     public List<Beam> CosmosBeams { get; set; } = new();
+    public bool CommanderReady { get; set; } = false;
+    public bool CosmosReady { get; set; } = false;
 
-    public War()
+    public War(Guid commanderId)
     {
+        CommanderId = commanderId;
+
         char[] ids = { 'A', 'B', 'C', 'D' };
 
         for (int i = 0; i < 4; i++)
@@ -43,7 +49,7 @@ public class War
 
     public BeamResponseDto Beam(BeamActionDto beam)
     {
-        if (Status == WarStatus.ENDED)
+        if (Status == WarStatus.ENDED || Status == WarStatus.LOBBY)
         {
             throw new Exception("Can't beam during peace.");
         }
@@ -114,7 +120,9 @@ public class War
             Status = Status,
             CommanderFleet = CommanderAstec.Fleet.Select(Spacecraft.ToDto).ToArray(),
             CommanderBeams = CommanderBeams,
-            CosmosBeams = CosmosBeams
+            CosmosBeams = CosmosBeams,
+            CommanderName = CommanderId.ToString(),
+            CosmosName = CosmosId.HasValue ? CosmosId.ToString() : null
         };
     }
 }

@@ -7,7 +7,11 @@ meta {
 post {
   url: {{host}}/war
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
 }
 
 vars:post-response {

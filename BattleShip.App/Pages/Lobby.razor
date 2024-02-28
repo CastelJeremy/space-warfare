@@ -1,0 +1,56 @@
+@page "/{warId}"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@if (!WarExists)
+{
+    <h1>This system is empty</h1>
+}
+else
+{
+    <h1>@WarId</h1>
+    <Astec />
+    <input type="checkbox" id="ready">
+    <label for="ready">Ready ?</label>
+    <button @onclick="SubmitStart">Start</button>
+}
+
+@code
+{
+    [Parameter]
+    public string WarId { get; set; } = null!;
+
+    private bool WarExists { get; set; } = true;
+    private WarStatus Status { get; set; }
+    private string? CosmosName { get; set; } = null;
+    private SpacecraftDto[] Fleet { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
+            Fleet = war.CommanderFleet;
+            Status = war.Status;
+            CosmosName = war.CosmosName;
+        } 
+        catch (HttpRequestException)
+        {
+            WarExists = false;
+        }
+    }
+
+    private async Task SubmitStart()
+    {
+        var res = await Http.PostAsync("/war/start/" + WarId, null);
+
+        if (res.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo($"/war/{WarId}");
+        }
+        else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+}
