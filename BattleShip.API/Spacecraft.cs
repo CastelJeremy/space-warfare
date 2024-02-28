@@ -9,6 +9,18 @@ public class Spacecraft
     public int Life { get; set; }
     public Orientation Orientation { get; set; }
 
+    public Spacecraft() { }
+
+    public Spacecraft(SpacecraftDto spacecraftDto)
+    {
+        Id = spacecraftDto.Id;
+        PosX = spacecraftDto.PosX;
+        PosY = spacecraftDto.PosY;
+        Size = spacecraftDto.Size;
+        Life = spacecraftDto.Size;
+        Orientation = spacecraftDto.Orientation;
+    }
+
     public static Spacecraft Clone(Spacecraft spacecraft)
     {
         return new Spacecraft

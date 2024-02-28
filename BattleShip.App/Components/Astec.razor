@@ -22,6 +22,9 @@
     [Parameter]
     public Action<BeamActionDto>? OnBeam { get; set; }
 
+    [Parameter]
+    public Action<SpacecraftDto>? OnClickSpacecraft { get; set; }
+
     private AstecCellModel[,] NewGrid { get; set; } = new AstecCellModel[10, 10];
 
     protected override void OnParametersSet()
@@ -59,9 +62,9 @@
                             break;
                     }
 
+                    NewGrid[x, y].SpacecraftId = spacecraft.Id;
                     NewGrid[x, y].Empty = false;
                     NewGrid[x, y].SpacecraftOrientation = spacecraft.Orientation;
-                    Console.WriteLine(spacecraft.Orientation);
 
                     if (spacecraft.Size == 1) {
                         NewGrid[x, y].SpacecraftPart = SpacecraftPart.FULL;
@@ -91,6 +94,16 @@
         if (OnBeam is not null)
         {
             OnBeam(new BeamActionDto{ PosX = posX, PosY = posY });
+        }
+
+        if (OnClickSpacecraft is not null && Fleet is not null)
+        {
+            char? spacecraftId = NewGrid[posX, posY].SpacecraftId;
+            if (spacecraftId is not null)
+            {
+                SpacecraftDto spacecraft = Fleet.Where((s) => s.Id == spacecraftId).First();
+                OnClickSpacecraft(spacecraft);
+            }
         }
     }
 }

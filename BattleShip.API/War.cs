@@ -7,8 +7,8 @@ public class War
     public Guid? CosmosId { get; set; } = null;
     public WarStatus Status { get; set; } = WarStatus.LOBBY;
     private Spacecraft[] Fleet { get; init; } = new Spacecraft[4];
-    private Astec CommanderAstec { get; set; }
-    private Astec CosmosAstec { get; set; }
+    public Astec CommanderAstec { get; set; }
+    public Astec CosmosAstec { get; set; }
     public List<Beam> CommanderBeams { get; set; } = new();
     public List<Beam> CosmosBeams { get; set; } = new();
     public bool CommanderReady { get; set; } = false;

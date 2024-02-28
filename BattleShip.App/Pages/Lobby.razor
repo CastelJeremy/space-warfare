@@ -9,11 +9,20 @@
 else
 {
     <h1>@WarId</h1>
-    <Astec Fleet="@Fleet" />
+    <Astec Fleet="@Fleet" OnClickSpacecraft="SelectSpacecraft"/>
     @if (CosmosName is not null)
     {
         <input type="checkbox" id="ready">
         <label for="ready">Ready ?</label>
+    }
+    @if (SelectedSpacecraft is not null)
+    {
+        <p>Move Spacecraft</p>
+        <button @onclick="@(() => Move(Orientation.NORTH))">↑</button>
+        <button @onclick="@(() => Move(Orientation.WEST))">←</button>
+        <button @onclick="@(() => Move(Orientation.EAST))">→</button>
+        <button @onclick="@(() => Move(Orientation.SOUTH))">↓</button>
+        <button @onclick="Rotate">↻</button>
     }
     <button @onclick="SubmitStart">Start</button>
 }
@@ -27,6 +36,7 @@ else
     private WarStatus Status { get; set; }
     private string? CosmosName { get; set; } = null;
     private SpacecraftDto[] Fleet { get; set; } = null!;
+    SpacecraftDto? SelectedSpacecraft { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,6 +64,84 @@ else
         else if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             NavigationManager.NavigateTo("/login");
+        }
+    }
+
+    void SelectSpacecraft(SpacecraftDto spacecraft)
+    {
+        SelectedSpacecraft = spacecraft;
+        // For some reason this is required to rerender
+        StateHasChanged();
+    }
+
+    async Task Move(Orientation orientation)
+    {
+        if (SelectedSpacecraft is not null)
+        {
+            int posX = SelectedSpacecraft.PosX;
+            int posY = SelectedSpacecraft.PosY;
+
+            switch (orientation)
+            {
+                case Orientation.NORTH:
+                    posX--;
+                    break;
+                case Orientation.EAST:
+                    posY++;
+                    break;
+                case Orientation.SOUTH:
+                    posX++;
+                    break;
+                case Orientation.WEST:
+                    posY--;
+                    break;
+            }
+
+            var res = await Http.PostAsJsonAsync("/war/move/" + WarId, new SpacecraftDto {
+                Id = SelectedSpacecraft.Id,
+                PosX = posX,
+                PosY = posY,
+                Size = SelectedSpacecraft.Size,
+                Orientation = SelectedSpacecraft.Orientation
+            });
+
+            res.EnsureSuccessStatusCode();
+            SelectedSpacecraft.PosX = posX;
+            SelectedSpacecraft.PosY = posY;
+        }
+    }
+
+    async Task Rotate()
+    {
+        if (SelectedSpacecraft is not null)
+        {
+            Orientation orientation = Orientation.NORTH;
+            switch (SelectedSpacecraft.Orientation)
+            {
+                case Orientation.NORTH:
+                    orientation = Orientation.EAST;
+                    break;
+                case Orientation.EAST:
+                    orientation = Orientation.SOUTH;
+                    break;
+                case Orientation.SOUTH:
+                    orientation = Orientation.WEST;
+                    break;
+                case Orientation.WEST:
+                    orientation = Orientation.NORTH;
+                    break;
+            }
+
+            var res = await Http.PostAsJsonAsync("/war/move/" + WarId, new SpacecraftDto {
+                Id = SelectedSpacecraft.Id,
+                PosX = SelectedSpacecraft.PosX,
+                PosY = SelectedSpacecraft.PosY,
+                Size = SelectedSpacecraft.Size,
+                Orientation = orientation
+            });
+
+            res.EnsureSuccessStatusCode();
+            SelectedSpacecraft.Orientation = orientation;
         }
     }
 }

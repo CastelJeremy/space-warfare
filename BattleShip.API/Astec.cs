@@ -2,6 +2,7 @@ using BattleShip.Models;
 
 public class Astec
 {
+    private const int GRID_SIZE = 10;
     private char[,] Grid = new char[10, 10];
     public Spacecraft[] Fleet { get; } = new Spacecraft[4];
 
@@ -89,6 +90,101 @@ public class Astec
         }
 
         return false;
+    }
+
+    public bool MoveSpacecraft(Spacecraft newSpacecraft)
+    {
+        Spacecraft spacecraft = Fleet.Where((s) => s.Id == newSpacecraft.Id).First();
+
+        // Check new position is free and in boundary
+        int posX = newSpacecraft.PosX;
+        int posY = newSpacecraft.PosY;
+
+        for (int i = 0; i < newSpacecraft.Size; i++)
+        {
+            if (posX < 0 || posX > GRID_SIZE - 1 || posY < 0 || posY > GRID_SIZE - 1)
+            {
+                return false;
+            }
+
+            if (Grid[posX, posY] != '\0' && Grid[posX, posY] != newSpacecraft.Id)
+            {
+                return false;
+            }
+
+            switch (newSpacecraft.Orientation)
+            {
+                case Orientation.NORTH:
+                    posX++;
+                    break;
+                case Orientation.EAST:
+                    posY--;
+                    break;
+                case Orientation.SOUTH:
+                    posX--;
+                    break;
+                case Orientation.WEST:
+                    posY++;
+                    break;
+            }
+        }
+
+        // Remove the spacecraft
+        posX = spacecraft.PosX;
+        posY = spacecraft.PosY;
+
+        for (int i = 0; i < spacecraft.Size; i++)
+        {
+            Grid[posX, posY] = '\0';
+
+            switch (spacecraft.Orientation)
+            {
+                case Orientation.NORTH:
+                    posX++;
+                    break;
+                case Orientation.EAST:
+                    posY--;
+                    break;
+                case Orientation.SOUTH:
+                    posX--;
+                    break;
+                case Orientation.WEST:
+                    posY++;
+                    break;
+            }
+        }
+
+        // Place the newSpacecraft
+        posX = newSpacecraft.PosX;
+        posY = newSpacecraft.PosY;
+
+        for (int i = 0; i < newSpacecraft.Size; i++)
+        {
+            Grid[posX, posY] = newSpacecraft.Id;
+
+            switch (newSpacecraft.Orientation)
+            {
+                case Orientation.NORTH:
+                    posX++;
+                    break;
+                case Orientation.EAST:
+                    posY--;
+                    break;
+                case Orientation.SOUTH:
+                    posX--;
+                    break;
+                case Orientation.WEST:
+                    posY++;
+                    break;
+            }
+        }
+
+        // Copy necessary values "Security"
+        spacecraft.PosX = newSpacecraft.PosX;
+        spacecraft.PosY = newSpacecraft.PosY;
+        spacecraft.Orientation = newSpacecraft.Orientation;
+
+        return true;
     }
 
     public bool Hit(int x, int y)

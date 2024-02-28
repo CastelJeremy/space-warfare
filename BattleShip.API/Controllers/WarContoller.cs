@@ -98,6 +98,55 @@ public class WarController : Controller
     }
 
     [Authorize]
+    [Route("move/{warId}")]
+    [HttpPost]
+    public Results<UnauthorizedHttpResult, NotFound, BadRequest, Ok> MoveSpacecraft(Guid warId, [FromBody] SpacecraftDto spacecraftDto)
+    {
+        ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+        Guid? commanderId = new Guid(identity!.FindFirst("id")!.Value);
+        if (identity is null || !commanderId.HasValue)
+        {
+            return TypedResults.Unauthorized();
+        }
+
+        War? war = null;
+        if (
+            !_warService.Wars.ContainsKey(warId)
+            || !_warService.Wars.TryGetValue(warId, out war)
+            || war is null
+        )
+        {
+            return TypedResults.NotFound();
+        }
+
+        if (
+            !war.CommanderId.Equals(commanderId.Value)
+            && (war.CosmosId is null || !war.CosmosId.Equals(commanderId.Value))
+        )
+        {
+            return TypedResults.NotFound();
+        }
+
+        if (war.Status != WarStatus.LOBBY)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        Astec astec = war.CommanderAstec;
+        if (war.CosmosId.Equals(commanderId.Value))
+        {
+            astec = war.CosmosAstec;
+        }
+
+        if (astec.MoveSpacecraft(new Spacecraft(spacecraftDto)))
+        {
+            return TypedResults.Ok();
+        }
+
+        return TypedResults.BadRequest();
+    }
+
+    [Authorize]
     [Route("start/{warId}")]
     [HttpPost]
     public Results<UnauthorizedHttpResult, NotFound, BadRequest, Ok> StartWar(Guid warId)
