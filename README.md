@@ -20,12 +20,12 @@
 - [ ] \*War Difficulty
   - [ ] \*Grid Size
   - [ ] \*Moderate and Hard AI
-- [ ] \*User Management
-  - [ ] \*Login Password - Auth0
+- [x] \*User Management
+  - [x] \*Login Password - ~~Auth0~~ Custom JWT
   - [ ] \*Multiplayer - SignalR
   - [ ] \*Multiplayer - Lobby with replay
   - [ ] \*War and Beam History
-  - [ ] \*Security
+  - [x] \*Security
 - [ ] Keyboard Support
   - [ ] Vim Style
 - [ ] \*Improved UI
