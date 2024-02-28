@@ -1,17 +1,13 @@
 meta {
   name: /auth/login
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
   url: {{host}}/auth/login
   body: json
-  auth: bearer
-}
-
-auth:bearer {
-  token: {{accessToken}}
+  auth: none
 }
 
 body:json {

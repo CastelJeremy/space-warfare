@@ -1,8 +1,7 @@
 using BattleShip.Models;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 
-public class Context : DbContext
+public class AuthContext : DbContext
 {
     public DbSet<Commander> Commanders { get; set; } = null!;
     public DbSet<Session> Sessions { get; set; } = null!;
