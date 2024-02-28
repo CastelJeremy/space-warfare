@@ -9,9 +9,12 @@
 else
 {
     <h1>@WarId</h1>
-    <Astec />
-    <input type="checkbox" id="ready">
-    <label for="ready">Ready ?</label>
+    <Astec Fleet="@Fleet" />
+    @if (CosmosName is not null)
+    {
+        <input type="checkbox" id="ready">
+        <label for="ready">Ready ?</label>
+    }
     <button @onclick="SubmitStart">Start</button>
 }
 
