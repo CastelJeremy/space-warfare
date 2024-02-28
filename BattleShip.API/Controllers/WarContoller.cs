@@ -37,6 +37,7 @@ public class WarController : Controller
     }
 
     [Route("beam/{warId}")]
+    [HttpPost]
     public Results<NotFound, JsonHttpResult<BeamResponseDto>> BeamWar(Guid warId, [FromBody] BeamActionDto beamAction)
     {
         if (!_warService.Wars.ContainsKey(warId))
