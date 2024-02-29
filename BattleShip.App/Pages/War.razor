@@ -9,8 +9,8 @@
 else
 {
     <h1>@WarId</h1>
-    <Astec Fleet="@Fleet" Beams="@CosmosBeams"/>
-    <Astec Beams="@CommanderBeams" OnBeam="OnCommanderBeam"/>
+    <Astec Size="@AstecSize" Fleet="@Fleet" Beams="@CosmosBeams"/>
+    <Astec Size="@AstecSize" Beams="@CommanderBeams" OnBeam="OnCommanderBeam"/>
 
     @if (Status == WarStatus.ENDED)
     {
@@ -24,6 +24,7 @@ else
     [Parameter]
     public string WarId { get; set; } = null!;
 
+    private int AstecSize { get; set; }
     private bool WarExists { get; set; } = true;
     private WarStatus Status { get; set; }
     private bool CommanderWon { get; set; }
@@ -37,6 +38,7 @@ else
         {
             WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
             Fleet = war.CommanderFleet;
+            AstecSize = war.AstecSize;
             CommanderBeams = war.CommanderBeams;
             CosmosBeams = war.CosmosBeams;
             Status = war.Status;

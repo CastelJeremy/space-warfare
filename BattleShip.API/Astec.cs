@@ -2,17 +2,19 @@ using BattleShip.Models;
 
 public class Astec
 {
-    private const int GRID_SIZE = 10;
-    private char[,] Grid = new char[10, 10];
+    private int Size { get; set; }
+    private char[,] Grid;
     public Spacecraft[] Fleet { get; } = new Spacecraft[4];
 
-    public Astec(Spacecraft[] fleet)
+    public Astec(Spacecraft[] fleet, int size)
     {
+        Size = size;
         Fleet = fleet.Select(Spacecraft.Clone).ToArray();
+        Grid = new char[Size, Size];
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Size; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < Size; j++)
             {
                 Grid[i, j] = '\0';
             }
@@ -27,9 +29,9 @@ public class Astec
                 spacecraft.Orientation = (Orientation)orientationValues.GetValue(Random.Shared.Next(orientationValues.Length))!;
 
                 int minPosX = spacecraft.Orientation == Orientation.SOUTH ? spacecraft.Size : 0;
-                int maxPosX = spacecraft.Orientation == Orientation.NORTH ? 10 - spacecraft.Size : 10;
+                int maxPosX = spacecraft.Orientation == Orientation.NORTH ? Size - spacecraft.Size : Size;
                 int minPosY = spacecraft.Orientation == Orientation.EAST ? spacecraft.Size : 0;
-                int maxPosY = spacecraft.Orientation == Orientation.WEST ? 10 - spacecraft.Size : 10;
+                int maxPosY = spacecraft.Orientation == Orientation.WEST ? Size - spacecraft.Size : Size;
 
                 spacecraft.PosX = Random.Shared.Next(minPosX, maxPosX);
                 spacecraft.PosY = Random.Shared.Next(minPosY, maxPosY);
@@ -102,7 +104,7 @@ public class Astec
 
         for (int i = 0; i < newSpacecraft.Size; i++)
         {
-            if (posX < 0 || posX > GRID_SIZE - 1 || posY < 0 || posY > GRID_SIZE - 1)
+            if (posX < 0 || posX > Size - 1 || posY < 0 || posY > Size - 1)
             {
                 return false;
             }
@@ -203,10 +205,10 @@ public class Astec
 
     public void Dump(List<Beam> beams)
     {
-        char[,] grid = new char[10, 10];
-        for (int i = 0; i < 10; i++)
+        char[,] grid = new char[Size, Size];
+        for (int i = 0; i < Size; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < Size; j++)
             {
                 grid[i, j] = Grid[i, j];
             }
@@ -219,9 +221,9 @@ public class Astec
 
         Console.WriteLine();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Size; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < Size; j++)
             {
                 Console.Write((grid[i, j] == '\0' ? "*" : grid[i, j]) + " ");
             }

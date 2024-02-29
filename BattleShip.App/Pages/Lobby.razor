@@ -9,7 +9,7 @@
 else
 {
     <h1>@WarId</h1>
-    <Astec Fleet="@Fleet" OnClickSpacecraft="SelectSpacecraft"/>
+    <Astec Size="AstecSize" Fleet="@Fleet" OnClickSpacecraft="SelectSpacecraft"/>
     @if (CosmosName is not null)
     {
         <input type="checkbox" id="ready">
@@ -32,6 +32,7 @@ else
     [Parameter]
     public string WarId { get; set; } = null!;
 
+    private int AstecSize { get; set; }
     private bool WarExists { get; set; } = true;
     private WarStatus Status { get; set; }
     private string? CosmosName { get; set; } = null;
@@ -43,6 +44,7 @@ else
         try
         {
             WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
+            AstecSize = war.AstecSize;
             Fleet = war.CommanderFleet;
             Status = war.Status;
             CosmosName = war.CosmosName;

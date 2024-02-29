@@ -7,6 +7,7 @@ public class War
     public Guid? CosmosId { get; set; } = null;
     public WarStatus Status { get; set; } = WarStatus.LOBBY;
     private Spacecraft[] Fleet { get; init; } = new Spacecraft[4];
+    public int AstecSize { get; set; } = 10;
     public Astec CommanderAstec { get; set; }
     public Astec CosmosAstec { get; set; }
     public List<Beam> CommanderBeams { get; set; } = new();
@@ -32,8 +33,8 @@ public class War
             Fleet[i] = spacecraft;
         }
 
-        CommanderAstec = new Astec(Fleet);
-        CosmosAstec = new Astec(Fleet);
+        CommanderAstec = new Astec(Fleet, AstecSize);
+        CosmosAstec = new Astec(Fleet, AstecSize);
     }
 
     private void CheckWarStatus()
@@ -73,9 +74,9 @@ public class War
         else
         {
             List<BeamActionDto> availableBeams = new();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < AstecSize; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < AstecSize; j++)
                 {
                     availableBeams.Add(new BeamActionDto { PosX = i, PosY = j });
                 }
@@ -119,6 +120,7 @@ public class War
             Id = Id,
             Status = Status,
             CommanderFleet = CommanderAstec.Fleet.Select(Spacecraft.ToDto).ToArray(),
+            AstecSize = AstecSize,
             CommanderBeams = CommanderBeams,
             CosmosBeams = CosmosBeams,
             CommanderName = CommanderId.ToString(),
