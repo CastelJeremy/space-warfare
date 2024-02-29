@@ -33,6 +33,42 @@ public class WarController : Controller
     }
 
     [Authorize]
+    [Route("setting/{warId}")]
+    [HttpPost]
+    public Results<UnauthorizedHttpResult, NotFound, BadRequest, Ok> UpdateWarSetting(Guid warId, WarSetting warSetting)
+    {
+        ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+        Guid? commanderId = new Guid(identity!.FindFirst("id")!.Value);
+        if (identity is null || !commanderId.HasValue)
+        {
+            return TypedResults.Unauthorized();
+        }
+
+        War? war = null;
+        if (
+            !_warService.Wars.ContainsKey(warId)
+            || !_warService.Wars.TryGetValue(warId, out war)
+            || war is null
+            || !war.CommanderId.Equals(commanderId.Value)
+        )
+        {
+            return TypedResults.NotFound();
+        }
+
+        if (war.Status != WarStatus.LOBBY)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        if (warSetting.AstecSize.HasValue)
+        {
+            war.setAstecSize(warSetting.AstecSize.Value);
+        }
+
+        return TypedResults.Ok();
+    }
+
+    [Authorize]
     [Route("{warId}")]
     [HttpGet]
     public Results<UnauthorizedHttpResult, NotFound, JsonHttpResult<WarDto>> GetWar(Guid warId)

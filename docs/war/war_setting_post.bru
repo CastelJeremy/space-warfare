@@ -1,0 +1,21 @@
+meta {
+  name: /war/setting/id
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}/war/setting/{{warId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "astecSize": 14
+  }
+}

@@ -6,8 +6,9 @@ public class War
     public Guid CommanderId { get; set; }
     public Guid? CosmosId { get; set; } = null;
     public WarStatus Status { get; set; } = WarStatus.LOBBY;
+    public WarDifficulty Difficulty { get; set; } = WarDifficulty.EASY;
     private Spacecraft[] Fleet { get; init; } = new Spacecraft[4];
-    public int AstecSize { get; set; } = 10;
+    private int AstecSize { get; set; } = 10;
     public Astec CommanderAstec { get; set; }
     public Astec CosmosAstec { get; set; }
     public List<Beam> CommanderBeams { get; set; } = new();
@@ -33,6 +34,23 @@ public class War
             Fleet[i] = spacecraft;
         }
 
+        CommanderAstec = new Astec(Fleet, AstecSize);
+        CosmosAstec = new Astec(Fleet, AstecSize);
+    }
+
+    public void setAstecSize(int astecSize)
+    {
+        if (Status != WarStatus.LOBBY)
+        {
+            throw new Exception("Can't update grid during war.");
+        }
+
+        if (astecSize != 8 && astecSize != 10 && astecSize != 12 && astecSize != 14)
+        {
+            throw new Exception("Invalid size.");
+        }
+
+        AstecSize = astecSize;
         CommanderAstec = new Astec(Fleet, AstecSize);
         CosmosAstec = new Astec(Fleet, AstecSize);
     }
