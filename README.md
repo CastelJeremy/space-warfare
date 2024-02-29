@@ -11,15 +11,15 @@
 
 ## Features
 - [x] Spacecraft Orientation (North, East, South, West)
-- [ ] \*AI
+- [x] \*AI
   - [x] Minimal AI
-  - [ ] \*Improved AI
+  - [x] \*Improved AI (ugly but harder)
 - [ ] \*gRPC Support
 - [ ] Shorter Game ID For User (Random Galaxy Name)
-- [ ] \*Custom User Spacecraft Placement
-- [ ] \*War Difficulty
-  - [ ] \*Grid Size
-  - [ ] \*Moderate and Hard AI
+- [x] \*Custom User Spacecraft Placement
+- [x] \*War Difficulty
+  - [x] \*Grid Size
+  - [x] \*Moderate and Hard AI
 - [x] \*User Management
   - [x] \*Login Password - ~~Auth0~~ Custom JWT
   - [ ] \*Multiplayer - SignalR
