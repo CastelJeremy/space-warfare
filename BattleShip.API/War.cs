@@ -91,26 +91,7 @@ public class War
         }
         else
         {
-            List<BeamActionDto> availableBeams = new();
-            for (int i = 0; i < AstecSize; i++)
-            {
-                for (int j = 0; j < AstecSize; j++)
-                {
-                    availableBeams.Add(new BeamActionDto { PosX = i, PosY = j });
-                }
-            }
-
-            foreach (Beam previousBeam in CosmosBeams)
-            {
-                availableBeams.RemoveAll(b => b.PosX == previousBeam.PosX && b.PosY == previousBeam.PosY);
-            }
-
-            BeamActionDto selectedBeam = availableBeams[Random.Shared.Next(availableBeams.Count())];
-            bool cosmosHit = CommanderAstec.Hit(selectedBeam.PosX, selectedBeam.PosY);
-            futureBeam = new Beam { PosX = selectedBeam.PosX, PosY = selectedBeam.PosY, Hit = cosmosHit };
-
-            CosmosBeams.Add(futureBeam);
-
+            futureBeam = CosmosPlay();
             CheckWarStatus();
             if (Status == WarStatus.ENDED)
             {
@@ -127,6 +108,122 @@ public class War
             Hit = commanderHit,
             CosmosBeam = futureBeam
         };
+    }
+
+    private Beam CosmosPlay()
+    {
+        BeamActionDto selectedBeam;
+        if (Difficulty == WarDifficulty.EASY)
+        {
+            List<BeamActionDto> availableBeams = new();
+            for (int i = 0; i < AstecSize; i++)
+            {
+                for (int j = 0; j < AstecSize; j++)
+                {
+                    availableBeams.Add(new BeamActionDto { PosX = i, PosY = j });
+                }
+            }
+
+            foreach (Beam previousBeam in CosmosBeams)
+            {
+                availableBeams.RemoveAll(b => b.PosX == previousBeam.PosX && b.PosY == previousBeam.PosY);
+            }
+
+            selectedBeam = availableBeams[Random.Shared.Next(availableBeams.Count())];
+        }
+        else if (Difficulty == WarDifficulty.MEDIUM)
+        {
+            List<BeamActionDto> availableBeams = new();
+            for (int i = 0; i < AstecSize; i++)
+            {
+                for (int j = 0; j < AstecSize; j++)
+                {
+                    availableBeams.Add(new BeamActionDto { PosX = i, PosY = j });
+                }
+            }
+
+            // Sextuple probabilities with spacecraft
+            foreach (Spacecraft spacecraft in CommanderAstec.Fleet)
+            {
+                int posX = spacecraft.PosX;
+                int posY = spacecraft.PosY;
+
+                for (int i = 0; i < spacecraft.Size; i++)
+                {
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    switch (spacecraft.Orientation)
+                    {
+                        case Orientation.NORTH:
+                            posX++;
+                            break;
+                        case Orientation.EAST:
+                            posY--;
+                            break;
+                        case Orientation.SOUTH:
+                            posX--;
+                            break;
+                        case Orientation.WEST:
+                            posY++;
+                            break;
+                    }
+                }
+            }
+
+            foreach (Beam previousBeam in CosmosBeams)
+            {
+                availableBeams.RemoveAll(b => b.PosX == previousBeam.PosX && b.PosY == previousBeam.PosY);
+            }
+
+            selectedBeam = availableBeams[Random.Shared.Next(availableBeams.Count())];
+        }
+        else
+        {
+            // Impossible
+            List<BeamActionDto> availableBeams = new();
+            foreach (Spacecraft spacecraft in CommanderAstec.Fleet)
+            {
+                int posX = spacecraft.PosX;
+                int posY = spacecraft.PosY;
+
+                for (int i = 0; i < spacecraft.Size; i++)
+                {
+                    if (CosmosBeams.Where(c => c.PosX == posX && c.PosY == posY).FirstOrDefault() is null)
+                    {
+                        availableBeams.Add(new BeamActionDto { PosX = posX, PosY = posY });
+                    }
+
+                    switch (spacecraft.Orientation)
+                    {
+                        case Orientation.NORTH:
+                            posX++;
+                            break;
+                        case Orientation.EAST:
+                            posY--;
+                            break;
+                        case Orientation.SOUTH:
+                            posX--;
+                            break;
+                        case Orientation.WEST:
+                            posY++;
+                            break;
+                    }
+                }
+            }
+
+            selectedBeam = availableBeams[Random.Shared.Next(availableBeams.Count())];
+        }
+
+        bool cosmosHit = CommanderAstec.Hit(selectedBeam.PosX, selectedBeam.PosY);
+        Beam futureBeam = new Beam { PosX = selectedBeam.PosX, PosY = selectedBeam.PosY, Hit = cosmosHit };
+
+        CosmosBeams.Add(futureBeam);
+
+        return futureBeam;
     }
 
     public WarDto ToDto()

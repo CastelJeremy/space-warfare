@@ -65,6 +65,11 @@ public class WarController : Controller
             war.setAstecSize(warSetting.AstecSize.Value);
         }
 
+        if (warSetting.Difficulty.HasValue)
+        {
+            war.Difficulty = warSetting.Difficulty.Value;
+        }
+
         return TypedResults.Ok();
     }
 

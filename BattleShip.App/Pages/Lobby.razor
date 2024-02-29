@@ -24,12 +24,18 @@ else
         <button @onclick="@(() => Move(Orientation.SOUTH))">↓</button>
         <button @onclick="Rotate">↻</button>
     }
-    <label for="size"></label>
+    <label for="size">Size:</label>
     <select id="size" @onchange="SubmitAstecSize">
         <option value="8">8x8</option>
         <option value="10" selected>10x10</option>
         <option value="12">12x12</option>
         <option value="14">14x14</option>
+    </select>
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty" @onchange="SubmitDifficulty">
+        <option value="0">Easy</option>
+        <option value="1">Medium</option>
+        <option value="2">Hard</option>
     </select>
     <button @onclick="SubmitStart">Start</button>
 }
@@ -64,15 +70,27 @@ else
 
     private async Task SubmitAstecSize(ChangeEventArgs e)
     {
-        var res = await Http.PostAsJsonAsync("/war/setting/" + WarId, new WarSetting { AstecSize = int.Parse(e.Value.ToString()) });
-        
-        if (res.StatusCode == System.Net.HttpStatusCode.OK)
+        if (e.Value is not null)
         {
-            WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
-            AstecSize = war.AstecSize;
-            Fleet = war.CommanderFleet;
-            Status = war.Status;
-            CosmosName = war.CosmosName;
+            var res = await Http.PostAsJsonAsync("/war/setting/" + WarId, new WarSetting { AstecSize = int.Parse(e.Value.ToString()!)! });
+
+            if (res.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                WarDto war = await Http.GetFromJsonAsync<WarDto>($"/war/{WarId}") ?? throw new Exception("Failed to decode response.");
+                AstecSize = war.AstecSize;
+                Fleet = war.CommanderFleet;
+                Status = war.Status;
+                CosmosName = war.CosmosName;
+            }
+        }
+    }
+
+    private async Task SubmitDifficulty(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            WarDifficulty difficulty = (WarDifficulty)int.Parse(e.Value.ToString()!)!;
+            var res = await Http.PostAsJsonAsync("/war/setting/" + WarId, new WarSetting { Difficulty = difficulty });
         }
     }
 
