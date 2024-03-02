@@ -2,9 +2,12 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+<div id="container">
 @if (!WarExists)
 {
     <h1>This system is empty</h1>
+    <p id="subtitle">Why would you start a war in an empty space ?</p>
+    <button class="style" @onclick="@(() => NavigationManager.NavigateTo("/"))">GO BACK HOME</button>
 }
 else
 {
@@ -17,12 +20,14 @@ else
     }
     @if (SelectedSpacecraft is not null)
     {
-        <p>Move Spacecraft</p>
-        <button @onclick="@(() => Move(Orientation.NORTH))">↑</button>
-        <button @onclick="@(() => Move(Orientation.WEST))">←</button>
-        <button @onclick="@(() => Move(Orientation.EAST))">→</button>
-        <button @onclick="@(() => Move(Orientation.SOUTH))">↓</button>
-        <button @onclick="Rotate">↻</button>
+        <div id="spacecraft-position">
+            <p>Move Spacecraft</p>
+            <button class="style" @onclick="@(() => Move(Orientation.NORTH))">🠱</button>
+            <button class="style" @onclick="@(() => Move(Orientation.WEST))">🠰</button>
+            <button class="style" @onclick="@(() => Move(Orientation.EAST))">🠲</button>
+            <button class="style" @onclick="@(() => Move(Orientation.SOUTH))">🠳</button>
+            <button class="style" @onclick="Rotate">↻</button>
+        </div>
     }
     <label for="size">Size:</label>
     <select id="size" @onchange="SubmitAstecSize">
@@ -37,8 +42,9 @@ else
         <option value="1">Medium</option>
         <option value="2">Hard</option>
     </select>
-    <button @onclick="SubmitStart">Start</button>
+    <button class="style" @onclick="SubmitStart">START</button>
 }
+</div>
 
 @code
 {

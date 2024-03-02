@@ -16,7 +16,7 @@
 >
     @if (Model.Beam) {
         @("X")
-    } else {
+    } else if (Model.Empty) {
         @("*")
     }
 </td>

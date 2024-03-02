@@ -1,0 +1,41 @@
+div#container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    padding: 20px;
+    color: #000;
+    font-size: 72px;
+    font-style: italic;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 204, 255, 1) 20%,
+        rgba(255, 255, 255, 1) 40%,
+        rgba(255, 0, 255, 1) 60%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 6px transparent;
+}
+
+div#form {
+    display: flex;
+    flex-direction: column;
+}
+
+div input {
+    margin-top: 20px;
+}
+
+div#button-container {
+    display: flex;
+}
+
+div#button-container button {
+    margin: 20px 10px 0 10px;
+    width: 50%;
+}

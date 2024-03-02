@@ -4,13 +4,19 @@
 
 <PageTitle>Login</PageTitle>
 
-<h1>Login</h1>
+<div id="container">
+    <h1>SPACE WARFARE</h1>
 
-<input type="text" @bind="Username">
-<input type="password" @bind="Password">
+    <div id="form">
+        <input class="style" type="text" placeholder="Commander Name" @bind="Username">
+        <input class="style" type="password" placeholder="Secret Password" @bind="Password">
 
-<button @onclick="SubmitLogin">Login</button>
-<button @onclick="SubmitRegister">Register</button>
+        <div id="button-container">
+            <button class="style" @onclick="SubmitLogin">LOGIN</button>
+            <button class="style" @onclick="SubmitRegister">REGISTER</button>
+        </div>
+    </div>
+</div>
 
 @code
 {

@@ -1,0 +1,17 @@
+div#container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div#container p#subtitle {
+    margin: 20px 0;
+}
+
+div#spacecraft-position button {
+    height: 50px;
+    width: 50px;
+    font-weight: bolder;
+}

@@ -4,12 +4,24 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div id="container">
+    <div id="leaderboard">
+        <h1>Leaderboard</h1>
+    </div>
+    <div id ="form">
+        <h1>Prepare for War !</h1>
 
-<button @onclick="NewWar">New</button>
+        <button class="style" @onclick="NewWar">NEW WAR</button>
 
-<input type="text" @bind="WarId">
-<button @onclick="JoinWar">Join</button>
+        <h2>OR</h2>
+
+        <input class="style" type="text" placeholder="WAR ID" @bind="WarId" disabled>
+        <button class="style" @onclick="JoinWar" disabled>JOIN WAR</button>
+    </div>
+    <div id="history">
+        <h1>War History</h1>
+    </div>
+</div>
 
 @code
 {

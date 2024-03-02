@@ -1,0 +1,38 @@
+div#container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+div#leaderboard {
+    margin: 40px 0 40px 40px;
+    border: 2px solid #ff00ff;
+    -webkit-box-shadow:
+        inset 0px 0px 3px 0px #fff,
+        0px 0px 3px 0px #fff;
+    box-shadow:
+        inset 0px 0px 3px 0px #fff,
+        0px 0px 3px 0px #fff;
+}
+
+div#form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+div#form > * {
+    margin-top: 20px;
+}
+
+div#history {
+    margin: 40px 40px 40px 0;
+    border: 2px solid #ff00ff;
+    -webkit-box-shadow:
+        inset 0px 0px 3px 0px #fff,
+        0px 0px 3px 0px #fff;
+    box-shadow:
+        inset 0px 0px 3px 0px #fff,
+        0px 0px 3px 0px #fff;
+}

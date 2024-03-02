@@ -13,6 +13,7 @@ td.clickable {
 }
 
 td.clickable:hover {
+    color: #000;
     background-color: #dae5e9;
 }
 
