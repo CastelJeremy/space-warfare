@@ -64,8 +64,16 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var authContext = scope.ServiceProvider.GetRequiredService<AuthContext>();
-    authContext.Database.EnsureCreated();
-    authContext.SaveChanges();
+    if (authContext.Database.EnsureCreated())
+    {
+        authContext.Commanders.Add(new BattleShip.Models.Commander { Username = "JRM", Password = "HASHED_PASSWORD", Score = 563 });
+        authContext.Commanders.Add(new BattleShip.Models.Commander { Username = "You", Password = "HASHED_PASSWORD", Score = 3 });
+        authContext.Commanders.Add(new BattleShip.Models.Commander { Username = "_Admin_", Password = "HASHED_PASSWORD", Score = 8 });
+        authContext.Commanders.Add(new BattleShip.Models.Commander { Username = "Player1", Password = "HASHED_PASSWORD", Score = 53 });
+        authContext.Commanders.Add(new BattleShip.Models.Commander { Username = "Pilot John", Password = "HASHED_PASSWORD", Score = -20 });
+
+        authContext.SaveChanges();
+    }
 }
 
 // Configure the HTTP request pipeline.

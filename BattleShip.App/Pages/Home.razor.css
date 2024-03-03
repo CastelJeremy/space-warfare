@@ -5,8 +5,10 @@ div#container {
 }
 
 div#leaderboard {
+    padding: 20px;
     margin: 40px 0 40px 40px;
     border: 2px solid #ff00ff;
+    overflow-y: auto;
     -webkit-box-shadow:
         inset 0px 0px 3px 0px #fff,
         0px 0px 3px 0px #fff;
@@ -27,12 +29,19 @@ div#form > * {
 }
 
 div#history {
+    padding: 20px;
     margin: 40px 40px 40px 0;
     border: 2px solid #ff00ff;
+    overflow-y: auto;
     -webkit-box-shadow:
         inset 0px 0px 3px 0px #fff,
         0px 0px 3px 0px #fff;
     box-shadow:
         inset 0px 0px 3px 0px #fff,
         0px 0px 3px 0px #fff;
+}
+
+div.list-item {
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid white;
 }

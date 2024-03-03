@@ -9,8 +9,10 @@
     <div id="leaderboard">
         <h1>Leaderboard</h1>
         @foreach (var item in Leaderboard) {
-            <p>@item.CommanderName</p>
-            <p>@item.Score</p>
+            <div class="list-item">
+                <div>Commander: @item.CommanderName</div>
+                <div>Score: @item.Score</div>
+            </div>
         }
     </div>
     <div id ="form">
@@ -25,6 +27,12 @@
     </div>
     <div id="history">
         <h1>War History</h1>
+        @foreach (var war in History) {
+            <div class="list-item">
+                <div>Size: @war.AstecSize</div>
+                <div>Status: @war.Status</div>
+            </div>
+        }
     </div>
 </div>
 
@@ -34,12 +42,23 @@
 
     private LeaderboardItem[] Leaderboard { get; set; } = [];
 
+    private WarDto[] History { get; set; } = [];
+
     protected override async Task OnInitializedAsync()
     {
         try {
             LeaderboardReply rep = await LeaderboardClient.GetScoresAsync(new LeaderboardRequest());
             Leaderboard = rep.Items.ToArray();
         } catch(Exception) { }
+
+        try {
+            var res = await Http.GetFromJsonAsync<WarDto[]>("/war");
+            
+            if (res is not null) {
+                History = res;
+            }
+        }
+        catch (HttpRequestException) { }
     }
 
     private async Task NewWar()

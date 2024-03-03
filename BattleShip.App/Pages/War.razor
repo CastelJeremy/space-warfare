@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+<div id="container">
 @if (!WarExists)
 {
     <h1>This system is empty</h1>
@@ -9,15 +10,19 @@
 else
 {
     <h1>@WarId</h1>
-    <Astec Size="@AstecSize" Fleet="@Fleet" Beams="@CosmosBeams"/>
-    <Astec Size="@AstecSize" Beams="@CommanderBeams" OnBeam="OnCommanderBeam"/>
+    <div id="astec-container">
+        <Astec Size="@AstecSize" Fleet="@Fleet" Beams="@CosmosBeams"/>
+        <h2>Feed</h2>
+        <Astec Size="@AstecSize" Beams="@CommanderBeams" OnBeam="OnCommanderBeam"/>
+    </div>
 
     @if (Status == WarStatus.ENDED)
     {
         <h2>@(CommanderWon ? "You Won" : "You Lose")</h2>
-        <button @onclick="SubmitReplay">Replay ?</button>
+        <button class="style" @onclick="SubmitReplay">REPLAY ?</button>
     }
 }
+</div>
 
 @code
 {

@@ -1,15 +1,17 @@
-<h1>Astec</h1>
-<table class=@(OnBeam is not null ? "clickable" : "")>
-    @foreach (int i in Enumerable.Range(0, Size.HasValue ? Size.Value : 10))
-    {
-    <tr>
-        @foreach (int j in Enumerable.Range(0, Size.HasValue ? Size.Value : 10))
+<div id="container">
+    <h1>A.S.T.E.C.</h1>
+    <table class=@(OnBeam is not null ? "clickable" : "")>
+        @foreach (int i in Enumerable.Range(0, Size.HasValue ? Size.Value : 10))
         {
-            <AstecCell Model="@NewGrid[i, j]" Onclick="() => OnAstecClick(i, j)"></AstecCell>
+        <tr>
+            @foreach (int j in Enumerable.Range(0, Size.HasValue ? Size.Value : 10))
+            {
+                <AstecCell Model="@NewGrid[i, j]" Onclick="() => OnAstecClick(i, j)"></AstecCell>
+            }
+        </tr>
         }
-    </tr>
-    }
-</table>
+    </table>
+</div>
 
 @code
 {

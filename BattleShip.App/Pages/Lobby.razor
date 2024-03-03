@@ -18,25 +18,29 @@ else
         <input type="checkbox" id="ready">
         <label for="ready">Ready ?</label>
     }
+    <div id="spacecraft-position">
     @if (SelectedSpacecraft is not null)
     {
-        <div id="spacecraft-position">
-            <p>Move Spacecraft</p>
-            <button class="style" @onclick="@(() => Move(Orientation.NORTH))">🠱</button>
-            <button class="style" @onclick="@(() => Move(Orientation.WEST))">🠰</button>
-            <button class="style" @onclick="@(() => Move(Orientation.EAST))">🠲</button>
-            <button class="style" @onclick="@(() => Move(Orientation.SOUTH))">🠳</button>
-            <button class="style" @onclick="Rotate">↻</button>
-        </div>
+        <p>Move Spacecraft</p>
+        <button class="style" @onclick="@(() => Move(Orientation.NORTH))">🠱</button>
+        <button class="style" @onclick="@(() => Move(Orientation.WEST))">🠰</button>
+        <button class="style" @onclick="@(() => Move(Orientation.EAST))">🠲</button>
+        <button class="style" @onclick="@(() => Move(Orientation.SOUTH))">🠳</button>
+        <button class="style" @onclick="Rotate">↻</button>
     }
-    <label for="size">Size:</label>
+    else
+    {
+        <p>Click a Spacecraft to move it</p>
+    }
+    </div>
+    <label for="size">Astec Size:</label>
     <select id="size" @onchange="SubmitAstecSize">
         <option value="8">8x8</option>
         <option value="10" selected>10x10</option>
         <option value="12">12x12</option>
         <option value="14">14x14</option>
     </select>
-    <label for="difficulty">Difficulty:</label>
+    <label for="difficulty">War Difficulty:</label>
     <select id="difficulty" @onchange="SubmitDifficulty">
         <option value="0">Easy</option>
         <option value="1">Medium</option>

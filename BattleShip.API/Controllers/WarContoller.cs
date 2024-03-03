@@ -76,6 +76,25 @@ public class WarController : Controller
     }
 
     [Authorize]
+    [HttpGet]
+    public Results<UnauthorizedHttpResult, JsonHttpResult<WarDto[]>> GetWars()
+    {
+        ClaimsIdentity? identity = HttpContext.User.Identity as ClaimsIdentity;
+        Guid? commanderId = new Guid(identity!.FindFirst("id")!.Value);
+        if (identity is null || !commanderId.HasValue)
+        {
+            return TypedResults.Unauthorized();
+        }
+
+        WarDto[] wars = _warService.Wars
+            .Where(w => w.Value.CommanderId.Equals(commanderId) || w.Value.CosmosId.Equals(commanderId))
+            .Select(w => w.Value.ToDto())
+            .ToArray();
+
+        return TypedResults.Json(wars);
+    }
+
+    [Authorize]
     [Route("{warId}")]
     [HttpGet]
     public Results<UnauthorizedHttpResult, NotFound, JsonHttpResult<WarDto>> GetWar(Guid warId)
