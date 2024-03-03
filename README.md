@@ -5,6 +5,19 @@ A C# experimental game to learn and test the .NET environment.
 ![Login Screenshot](/docs/login_screenshot.png)
 ![Game Screenshot](/docs/game_screenshot.png)
 
+## Run
+
+Start the database :
+```
+docker compose up -d
+```
+
+Build and run the project :
+```
+dotnet run --project BattleShip.API
+dotnet run --project BattleShip.App
+```
+
 ## Things I would change
 
 - Custom JWT is fun but probably insecure and sessions are partially implemented.
