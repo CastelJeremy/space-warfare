@@ -1,5 +1,19 @@
 # Space Warfare
 
+A C# experimental game to learn and test the .NET environment.
+
+![Login Screenshot](/docs/login_screenshot.png)
+![Game Screenshot](/docs/game_screenshot.png)
+
+## Things I would change
+
+- Custom JWT is fun but probably insecure and sessions are partially implemented.
+- Game logic should be outside of the War class.
+- Add CouchDB to store War history.
+- Better ranking mechanism.
+- Better "AI" algorithm.
+- Add error handling on client request.
+
 ## Denomination
 - Game is War
 - Grid is Astec
