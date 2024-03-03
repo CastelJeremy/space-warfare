@@ -18,6 +18,7 @@ builder.Services.AddSingleton<WarService>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddDbContext<AuthContext>();
 builder.Services.AddControllers();
+builder.Services.AddGrpc();
 
 builder.Services.AddCors();
 builder.Services.AddAuthorization();
@@ -81,10 +82,13 @@ app.UseCors(c =>
     c.AllowAnyMethod();
     c.AllowAnyOrigin();
 });
+app.UseGrpcWeb();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<LeaderboardService>().EnableGrpcWeb();
 
 app.Run();
 

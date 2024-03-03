@@ -1,12 +1,17 @@
 ﻿@page "/"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject Leaderboard.LeaderboardClient LeaderboardClient
 
 <PageTitle>Home</PageTitle>
 
 <div id="container">
     <div id="leaderboard">
         <h1>Leaderboard</h1>
+        @foreach (var item in Leaderboard) {
+            <p>@item.CommanderName</p>
+            <p>@item.Score</p>
+        }
     </div>
     <div id ="form">
         <h1>Prepare for War !</h1>
@@ -26,6 +31,16 @@
 @code
 {
     private string WarId { get; set; } = string.Empty;
+
+    private LeaderboardItem[] Leaderboard { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        try {
+            LeaderboardReply rep = await LeaderboardClient.GetScoresAsync(new LeaderboardRequest());
+            Leaderboard = rep.Items.ToArray();
+        } catch(Exception) { }
+    }
 
     private async Task NewWar()
     {

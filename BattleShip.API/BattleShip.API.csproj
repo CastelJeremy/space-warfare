@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="gRPC.AspNetCore" Version="2.61.0" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.61.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
@@ -20,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BattleShip.Models\BattleShip.Models.csproj" />
+    <ProtoBuf Include="..\grpc\Leaderboard.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

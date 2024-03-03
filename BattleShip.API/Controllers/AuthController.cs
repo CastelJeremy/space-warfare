@@ -31,7 +31,7 @@ public class AuthController : Controller
         SHA3_256 sha256 = SHA3_256.Create();
         string hashedPassword = Convert.ToHexString(sha256.ComputeHash(Encoding.UTF8.GetBytes(commanderRegister.Password)));
 
-        Commander commander = new Commander { Username = commanderRegister.Username, Password = hashedPassword };
+        Commander commander = new Commander { Username = commanderRegister.Username, Password = hashedPassword, Score = 0 };
         _authContext.Commanders.Add(commander);
         _authContext.SaveChanges();
 

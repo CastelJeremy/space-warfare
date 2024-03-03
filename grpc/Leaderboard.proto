@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message LeaderboardRequest { }
+
+message LeaderboardReply {
+    repeated LeaderboardItem items = 1;
+}
+
+message LeaderboardItem {
+    string commanderName = 2;
+    int32 score = 3;
+}
+
+service Leaderboard {
+    rpc GetScores (LeaderboardRequest) returns (LeaderboardReply);
+}
+

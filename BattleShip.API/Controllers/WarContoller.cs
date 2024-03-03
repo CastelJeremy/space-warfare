@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 public class WarController : Controller
 {
     private readonly WarService _warService;
+    private readonly AuthContext _authContext;
 
-    public WarController(WarService warService)
+    public WarController(WarService warService, AuthContext authContext)
     {
         _warService = warService;
+        _authContext = authContext;
     }
 
     [Authorize]
@@ -251,6 +253,24 @@ public class WarController : Controller
             return TypedResults.NotFound();
         }
 
-        return TypedResults.Json(war.Beam(beamAction));
+        BeamResponseDto res = war.Beam(beamAction);
+
+        if (war.Status == WarStatus.ENDED)
+        {
+            var commander = _authContext.Commanders.Where((c) => c.Id == commanderId.Value).First();
+
+            if (res.Winner == "Commander")
+            {
+                commander.Score++;
+            }
+            else
+            {
+                commander.Score--;
+            }
+
+            _authContext.SaveChanges();
+        }
+
+        return TypedResults.Json(res);
     }
 }

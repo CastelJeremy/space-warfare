@@ -14,7 +14,7 @@
 - [x] \*AI
   - [x] Minimal AI
   - [x] \*Improved AI (ugly but harder)
-- [ ] \*gRPC Support
+- [x] \*gRPC Support (Leaderboard)
 - [ ] Shorter Game ID For User (Random Galaxy Name)
 - [x] \*Custom User Spacecraft Placement
 - [x] \*War Difficulty
@@ -26,6 +26,7 @@
   - [ ] \*Multiplayer - Lobby with replay
   - [ ] \*War and Beam History
   - [x] \*Security
+  - [x] \*Leaderboard
 - [ ] Keyboard Support
   - [ ] Vim Style
 - [ ] \*Improved UI
